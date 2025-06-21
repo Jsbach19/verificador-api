@@ -16,7 +16,7 @@ def verificar():
     try:
         data = request.get_json()
 
-        # 👇 Mostrar en los logs lo que se recibe
+        # 🟡 Mostrar en los logs lo que se recibe
         print("🟡 Datos recibidos en /verificar:", data)
 
         texto = data.get("texto", "") if data else ""
@@ -25,7 +25,11 @@ def verificar():
             print("🔴 No se proporcionó texto para verificar.")
             return jsonify({"error": "No se proporcionó texto para verificar"}), 400
 
-        prompt = f"Dime si esta afirmación es falsa y explica por qué: {texto}"
+        # ✅ Prompt más natural y explicativo
+        prompt = (
+            f"🤔 Esta afirmación necesita ser verificada: \"{texto}\".\n"
+            "¿Es falsa o verdadera? Explica tu respuesta en tono claro y sencillo, como si se lo dijeras a un estudiante curioso."
+        )
 
         respuesta = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -41,7 +45,7 @@ def verificar():
 
         print("✅ Verificación completada correctamente.")
         return jsonify({
-            "respuesta": contenido,
+            "respuesta": f"🤔 {contenido}",
             "tokensSpent": tokens_usados
         })
 
@@ -51,3 +55,4 @@ def verificar():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
