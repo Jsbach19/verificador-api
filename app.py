@@ -15,9 +15,14 @@ def home():
 def verificar():
     try:
         data = request.get_json()
-        texto = data.get("texto", "")
+
+        # 👇 Mostrar en los logs lo que se recibe
+        print("🟡 Datos recibidos en /verificar:", data)
+
+        texto = data.get("texto", "") if data else ""
 
         if not texto:
+            print("🔴 No se proporcionó texto para verificar.")
             return jsonify({"error": "No se proporcionó texto para verificar"}), 400
 
         prompt = f"Dime si esta afirmación es falsa y explica por qué: {texto}"
@@ -34,12 +39,14 @@ def verificar():
         contenido = respuesta.choices[0].message["content"]
         tokens_usados = respuesta["usage"]["total_tokens"]
 
+        print("✅ Verificación completada correctamente.")
         return jsonify({
             "respuesta": contenido,
             "tokensSpent": tokens_usados
         })
 
     except Exception as e:
+        print("❌ Error en /verificar:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
