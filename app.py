@@ -14,8 +14,6 @@ def home():
 def verificar():
     try:
         data = request.get_json()
-        print("🟡 Datos recibidos en /verificar:", data)
-
         texto = data.get("texto", "") if data else ""
 
         if not texto:
@@ -39,7 +37,6 @@ def verificar():
         })
 
     except Exception as e:
-        print("❌ Error:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
