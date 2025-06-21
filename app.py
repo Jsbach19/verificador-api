@@ -1,7 +1,14 @@
-import openai
+from flask import Flask, request, jsonify
 from openai import OpenAI
+import os
+
+app = Flask(__name__)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+@app.route('/')
+def home():
+    return "API de verificación conectada a OpenAI"
 
 @app.route('/verificar', methods=['POST'])
 def verificar():
@@ -32,4 +39,8 @@ def verificar():
         })
 
     except Exception as e:
+        print("❌ Error:", str(e))
         return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
